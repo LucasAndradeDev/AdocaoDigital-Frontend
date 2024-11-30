@@ -1,0 +1,16 @@
+/* src/index.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* Container mais centralizado */
+.container {
+  @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+}
+
+/* Container maior, com largura máxima personalizada */
+.container-fluid {
+  @apply mx-auto max-w-[2000px] px-4 sm:px-6 lg:px-8;
+}
+
