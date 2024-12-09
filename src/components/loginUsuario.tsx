@@ -2,11 +2,13 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { motion } from 'framer-motion';
+import { useState } from 'react';
+
 
 
 // importartão das imagens
 import img from '../assets/img-login.jpg';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 // Importando os icones
 import { Mail, Lock } from 'lucide-react';
@@ -25,56 +27,71 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>; // Tipagem do formulário basedo no Zod
 
+
 // Função principal
 const LoginUsuario = () => {
-
-
+    const navigate = useNavigate(); // Hook para redirecionar
     const { register, handleSubmit, reset, formState: { errors } } = useForm<FormData>({
         resolver: zodResolver(formSchema),
     });
 
-    // Função para lidar com o envio do formulário
-    async function HandleLoginUser(data: FormData) {
-        // Depuração do formulário
-        console.log('Dados do formulário:', data);
+    // Função auxiliar para salvar os dados no localStorage
+    function saveAdotanteToLocalStorage(token: string, adotante: any) {
+        // Salva o token
+        localStorage.setItem('token', token);
 
-        // Envia os dados para a rota de cadastro
+        // Salva os dados básicos do adotante
+        const { id, nome, sobrenome, email, telefone, enderecos } = adotante || {};
+        localStorage.setItem('id', id || '');
+        localStorage.setItem('nome', nome || '');
+        localStorage.setItem('sobrenome', sobrenome || '');
+        localStorage.setItem('email', email || '');
+        localStorage.setItem('telefone', telefone || '');
+
+        // Salva o primeiro endereço, se disponível
+        const endereco = enderecos?.[0] || {};
+        localStorage.setItem('bairro', endereco.bairro || '');
+        localStorage.setItem('cidade', endereco.cidade || '');
+        localStorage.setItem('rua', endereco.rua || '');
+        localStorage.setItem('numero_residencia', endereco.numero_residencia || '');
+    }
+
+    // Função principal de login
+    async function HandleLoginUser(data: FormData) {
+
         try {
-            // Chama a função que está na rota de cadastro
+            // Chama a função que faz a requisição
             const { token, adotante } = await LoginUsuarioRoute({
                 email: data.email,
                 password: data.senha,
             });
 
-            // Armazena o token no localStorage
-            localStorage.setItem('token', token);
+            // Salva os dados no localStorage
+            saveAdotanteToLocalStorage(token, adotante);
 
-            // Armazena os dados do adotante no localStorage
-            localStorage.setItem('id', adotante?.id || '');
-            localStorage.setItem('nome', adotante?.nome || '');
-            localStorage.setItem('sobrenome', adotante?.sobrenome || '');
-            localStorage.setItem('email', adotante?.email || '');
-            localStorage.setItem('telefone', adotante?.telefone || '');
+            // Mensagem de depuração
+            console.log('Login realizado com sucesso!', { token, adotante });
 
-            // Verifica se há endereços e pega o primeiro
-            const endereco = adotante?.enderecos?.[0] || {};
-            localStorage.setItem('bairro', endereco.bairro || '');
-            localStorage.setItem('cidade', endereco.cidade || '');
-            localStorage.setItem('rua', endereco.rua || '');
-            localStorage.setItem('numero_residencia', endereco.numero_residencia || '');
+            // Redireciona para a página inicial
+            navigate('/');
 
-            // Exibir todos os dados de endereço
-            console.log('Endereço do adotante:', endereco);
+            // Recarrega a página após o redirecionamento
+            window.location.reload();
+
             // Limpa o formulário
             reset();
-
-
-            // Depuração do objeto adotante
-            console.log('Dados do adotante:', adotante);
         } catch (error) {
-            console.error(error);
+            console.error('Erro ao realizar login:', error);
+            alert('Falha ao realizar login. Verifique suas credenciais e tente novamente.');
         }
     }
+
+    // Função para controlar a visibilidade da senha
+    const [showPassword, setShowPassword] = useState(false);
+
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
 
 
     return (
@@ -122,27 +139,50 @@ const LoginUsuario = () => {
 
                                 </div>
 
+
                                 {/* Senha */}
-                                <div className='col-span-2 flex flex-col gap-1'>
-                                    <div className="flex items-center gap-2">
-                                        <Lock size={16} color='#4F46E5'></Lock>
-                                        <label htmlFor="senha" className="block text-sm font-medium text-gray-700">Senha</label>
+                                <div className="col-span-2">
+                                    <label htmlFor="senha" className=" text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
+                                        <Lock size={16} color="#4F46E5" />
+                                        Senha
+                                    </label>
+
+                                    <div className="relative">
+                                        {/* Campo de Senha */}
+                                        <input
+                                            {...register('senha')}
+                                            type={showPassword ? 'text' : 'password'}
+                                            name="senha"
+                                            placeholder="Digite sua senha"
+                                            className="block w-full rounded-lg border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-gray-900 sm:text-sm px-4 py-2 focus:outline-none"
+                                        />
+
+                                        {/* Botão de alternar visibilidade */}
+                                        <button
+                                            type="button"
+                                            onClick={togglePasswordVisibility}
+                                            className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700 transition focus:outline-none"
+                                        >
+                                            {showPassword ? (
+                                                <span role="img" aria-label="Ocultar senha">
+                                                    🙈
+                                                </span>
+                                            ) : (
+                                                <span role="img" aria-label="Mostrar senha">
+                                                    👁️
+                                                </span>
+                                            )}
+                                        </button>
                                     </div>
 
-                                    <input
-                                        {...register('senha')}
-                                        type="password"
-                                        name='senha'
-                                        placeholder='Digite sua senha'
-                                        className="block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-3 py-2 focus:outline-none focus:ring-1"
-                                    />
+                                    {/* Mensagem de erro */}
                                     {errors.senha && (
                                         <p className="text-red-500 text-sm mt-1">
                                             {errors.senha.message}
                                         </p>
                                     )}
-
                                 </div>
+
                             </div>
                         </div>
                         <button

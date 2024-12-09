@@ -27,7 +27,7 @@ const SobreNos = () => {
 
   return (
     <div className="relative bg-gradient-to-br from-purple-50 via-white to-orange-50 min-h-screen sm:pb-10 pb-4 sm:pt-28 pt-6">
-      {/* Subtle Background Texture */}
+      
       <div className="absolute inset-0 opacity-5 bg-gradient-to-br from-purple-100 to-orange-100 pointer-events-none"></div>
       
       <motion.div 
@@ -36,7 +36,7 @@ const SobreNos = () => {
         variants={containerVariants}
         className="relative z-10 max-w-7xl mx-auto px-4 py-16 container"
       >
-        {/* Header Section with Elegant Gradient and Layered Design */}
+       
         <motion.header 
           variants={itemVariants}
           className="relative bg-gradient-to-br from-purple-700 via-purple-600 to-orange-600 text-white rounded-3xl overflow-hidden shadow-2xl mb-16"
@@ -56,9 +56,9 @@ const SobreNos = () => {
           </div>
         </motion.header>
 
-        {/* Mission and Impact Section */}
+        
         <div className="grid md:grid-cols-2 gap-12 mb-16">
-          {/* Mission Statement */}
+         
           <motion.div 
             variants={itemVariants}
             className="bg-white rounded-3xl shadow-xl p-10 border-l-8 border-purple-500 hover:cursor-pointer hover:scale-105 hover:shadow-xl"
@@ -74,7 +74,7 @@ const SobreNos = () => {
             </p>
           </motion.div>
 
-          {/* Impact Section */}
+          
           <motion.div 
             variants={itemVariants}
             className="bg-gradient-to-br from-purple-100 to-orange-50 rounded-3xl shadow-xl p-10 relative overflow-hidden hover:cursor-pointer hover:scale-105 hover:shadow-xl"
@@ -97,7 +97,7 @@ const SobreNos = () => {
           </motion.div>
         </div>
 
-        {/* Values Section */}
+       
         <motion.section 
           variants={itemVariants}
           className="bg-white/80 backdrop-blur-lg rounded-3xl shadow-2xl p-16 container"

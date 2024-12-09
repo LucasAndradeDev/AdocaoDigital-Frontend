@@ -60,7 +60,7 @@ const formSchema = z
                     path: ['confirmarSenha'],
                 });
             }
-            
+
             // Validação adicional de senha quando preenchida
             if (data.senha.length > 0 && data.senha.length < 6) {
                 ctx.addIssue({
@@ -83,11 +83,11 @@ const GerenciarPerfil: React.FC = () => {
         setUserId(id);
     }, []);
 
-    const { 
-        register, 
-        handleSubmit, 
+    const {
+        register,
+        handleSubmit,
         formState: { errors },
-        reset 
+        reset
     } = useForm<FormData>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -108,21 +108,27 @@ const GerenciarPerfil: React.FC = () => {
             const cleanedData = Object.fromEntries(
                 Object.entries(data).filter(([_, v]) => v !== '' && v !== null) // Garante que campos vazios ou nulos sejam removidos
             );
-    
-            // Chama a função que está na rota de cadastro
+
+            // Chama a função que está na rota de cadastroo
             await GerenciarPerfilRoute(userId!, cleanedData);
-    
+
             // Atualiza os dados do adotante no localStorage, mas não salva senha
             Object.entries(cleanedData).forEach(([key, value]) => {
                 // Garante que 'senha' e 'confirmarSenha' não sejam salvos
                 if (key !== 'senha' && key !== 'confirmarSenha') {
-                    localStorage.setItem(key, value as string); 
+                    localStorage.setItem(key, value as string);
                 }
             });
-    
+
             // Mostrar mensagem de sucesso
             alert('Perfil atualizado com sucesso!');
-    
+
+            // navegar para a página inicial
+            window.location.href = '/';
+
+
+            window.location.reload();
+
             // Recarregar os valores do formulário
             reset();
         } catch (error) {
@@ -130,7 +136,7 @@ const GerenciarPerfil: React.FC = () => {
             alert('Erro ao atualizar perfil. Tente novamente.');
         }
     }
-    
+
 
     return (
         <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-8 pt-40 pb-10">
@@ -233,47 +239,8 @@ const GerenciarPerfil: React.FC = () => {
 
                                 </div>
 
-                                {/* Senha */}
-                                <div className='col-span-2 flex flex-col gap-1'>
-                                    <div className="flex items-center gap-2">
-                                        <Lock size={16} color='#4F46E5'></Lock>
-                                        <label htmlFor="senha" className="block text-sm font-medium text-gray-700">Senha</label>
-                                    </div>
+                                
 
-                                    <input
-                                        {...register('senha')}
-                                        type="password"
-                                        name='senha'
-                                        placeholder='Digite sua senha'
-                                        className="block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-3 py-2 focus:outline-none focus:ring-1"
-                                    />
-                                    {errors.senha && (
-                                        <p className="text-red-500 text-sm mt-1">
-                                            {errors.senha.message}
-                                        </p>
-                                    )}
-
-                                </div>
-
-                                <div className='col-span-2 flex flex-col gap-1'>
-                                    <div className="flex items-center gap-2">
-                                        <Lock size={16} color='#4F46E5'></Lock>
-                                        <label htmlFor="confirmarSenha" className="block text-sm font-medium text-gray-700">Confirmar Senha</label>
-                                    </div>
-
-                                    <input
-                                        {...register('confirmarSenha')}
-                                        type="password"
-                                        name='confirmarSenha'
-                                        placeholder='Confirme sua senha'
-                                        className="block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-3 py-2 focus:outline-none focus:ring-1"
-                                    />
-                                    {errors.confirmarSenha && (
-                                        <p className="text-red-500 text-sm mt-1">
-                                            {errors.confirmarSenha.message}
-                                        </p>
-                                    )}
-                                </div>
 
                                 <div className='col-span-2 flex flex-col gap-1'>
                                     <div className="flex items-center gap-2">
@@ -390,15 +357,20 @@ const GerenciarPerfil: React.FC = () => {
                             </div>
                         </div>
 
-
-
-                        <button
-                            type="submit"
-                            onClick={handleSubmit(handleGerenciarPerfil)}
-                            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 rounded-md transition duration-700 hover:scale-105"
-                        >
-                            Salvar
-                        </button>
+                        <div className="mt-6 flex gap-4">
+                            <button
+                                type="submit"
+                                onClick={handleSubmit(handleGerenciarPerfil)}
+                                className="w-2/3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 rounded-md transition duration-700 hover:scale-105"
+                            >
+                                Salvar
+                            </button>
+                            <button
+                                className="w-1/3 bg-red-600 hover:bg-red-700 text-white font-semibold py-2 rounded-md transition duration-700 hover:scale-105"
+                            >
+                                Deletar conta
+                            </button>
+                        </div>
 
 
                     </form>

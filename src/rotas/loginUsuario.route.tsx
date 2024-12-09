@@ -25,7 +25,7 @@ interface CadastroUsuariosRouteProps {
       // Verifica se a resposta foi bem-sucedida
       if (response.ok) {
         const responseData = await response.json();
-        alert('Usuário cadastrado com sucesso!');
+        alert('Usuário logado com sucesso!');
         // Dados do adotante
         console.log('Dados do adotante:', responseData.adotante);
         return responseData;

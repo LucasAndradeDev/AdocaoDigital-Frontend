@@ -102,6 +102,103 @@ const MOCK_PETS = [
       },
     ]
   },
+  {
+    id: "7",
+    nome: "Mimi",
+    especie: "Gato",
+    descricao: "Mimi é uma gata carinhosa, perfeita para quem procura um companheiro independente e afetuoso.",
+    tamanho: "MÉDIO",
+    status: "DISPONÍVEL",
+    peso: 3.2,
+    personalidade: "Carinhosa",
+    idade: 1,
+    Foto_Pet: [
+      {
+        url: "https://cdn0.peritoanimal.com.br/pt/posts/2/5/6/racas_de_gatos_brancos_lista_completa_23652_600.jpg"
+      }
+    ]
+  },
+  {
+    id: "8",
+    nome: "Zequinha",
+    especie: "Pássaro",
+    descricao: "Zequinha é um periquito alegre que adora cantar e trazer vida para o ambiente.",
+    tamanho: "PEQUENO",
+    status: "DISPONÍVEL",
+    peso: 0.1,
+    personalidade: "Alegre",
+    idade: 1,
+    Foto_Pet: [
+      {
+        "url": "https://png.pngtree.com/thumb_back/fh260/background/20230610/pngtree-brown-brown-bird-with-a-beak-open-image_2964769.jpg"
+      }
+    ]
+  },
+  {
+    id: "9",
+    nome: "Tobias",
+    especie: "Coelho",
+    descricao: "Tobias é um coelho de pelagem macia, ideal para famílias que desejam um pet tranquilo e dócil.",
+    tamanho: "PEQUENO",
+    status: "DISPONÍVEL",
+    peso: 1.8,
+    personalidade: "Dócil",
+    idade: 3,
+    Foto_Pet: [
+      {
+        url: "https://www.weasy.com.br/cdn/shop/articles/d89ab54465c0299f5b7f2d0c822351ca_540x_c524efb4-c3fd-45cb-bf22-f900d2476f6f.png?v=1651598286"
+      }
+    ]
+  },
+  {
+    id: "10",
+    nome: "Nina",
+    especi: "Hamster",
+    descricao: "Nina é uma hamster ativa, ideal para quem quer um pet pequeno e cheio de energia.",
+    tamanho: "MINÚSCULO",
+    status: "DISPONÍVEL",
+    peso: 0.05,
+    personalidade: "Ativa",
+    idade: 1,
+    Foto_Pet: [
+      {
+        url: "https://jpimg.com.br/uploads/2024/11/5-curiosidades-fascinantes-sobre-os-hamsters.jpg"
+      }
+    ]
+  },
+  {
+    id: '10',
+    nome: 'Milo',
+    especie: 'Gato',
+    descricao: 'Milo é um gato muito carinhoso e curioso, ideal para quem busca um companheiro independente e afetuoso.',
+    tamanho: 'MÉDIO',
+    status: 'DISPONÍVEL',
+    peso: 4.2,
+    personalidade: 'Curioso',
+    idade: 3,
+    Foto_Pet: [
+      {
+        url: 'https://img.freepik.com/fotos-gratis/gato-brincando-em-uma-casa-suja_23-2149248491.jpg',
+      },
+    ],
+  },
+  {
+    id: '11',
+    nome: 'Pipoca',
+    especie: 'Coelho',
+    descricao: 'Pipoca é um coelhinho brincalhão e dócil, perfeito para quem gosta de animais que adoram interagir e pular pela casa.',
+    tamanho: 'PEQUENO',
+    status: 'DISPONÍVEL',
+    peso: 1.8,
+    personalidade: 'Brincalhão',
+    idade: 1,
+    Foto_Pet: [
+      {
+        url: 'https://crmvsp.gov.br/wp-content/uploads/2021/04/29.03.2021_Coelho_nao_e_presente_de_Pascoa_ideal_Pixabay-1024x572.png',
+      },
+    ],
+  }
+  
 ];
 
 

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Search, Filter, X } from 'lucide-react';
 
+import { GenderMale, GenderFemale } from "phosphor-react";
+
 interface PetFilter {
     search: string;
     minAge: number;
@@ -28,8 +30,8 @@ const Filtro: React.FC = () => {
 
     const sizes = ['Pequeno', 'Médio', 'Grande'];
     const genero = [
-        { value: 'MACHO', icon: <Search className="w-5 h-5" />, label: 'Macho' },
-        { value: 'FEMEA', icon: <Search className="w-5 h-5" />, label: 'Fêmea' }
+        { value: 'MACHO', icon: <GenderMale size={20} />, label: 'Macho' },
+        { value: 'FEMEA', icon: <GenderFemale size={20} />, label: 'Fêmea' }
     ];
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {

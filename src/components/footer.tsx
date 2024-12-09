@@ -1,31 +1,40 @@
 import React from 'react';
 import { Link } from "react-router-dom";
-import { 
-  Phone, Mail, MapPin, Linkedin, Instagram, PawPrint, ArrowUpRight 
+import {
+    Phone, Mail, MapPin, Linkedin, Instagram, PawPrint, ArrowUpRight,
+    ArrowUp
 } from 'lucide-react';
-import { FaFacebook, FaTwitter } from "react-icons/fa";
+import { FaFacebook, FaTwitter, FaArrowUp } from "react-icons/fa";
 
 function Footer() {
     const currentYear = new Date().getFullYear();
     const socialLinks = [
-        { 
-            icon: <Instagram className="w-5 h-5 group-hover:text-[#E1306C]" />, 
-            href: "https://www.instagram.com/adocaodigital" 
+        {
+            icon: <Instagram className="w-5 h-5 group-hover:text-[#E1306C]" />,
+            href: "https://www.instagram.com/adocaodigital"
         },
-        { 
-            icon: <FaFacebook className="w-5 h-5 group-hover:text-[#3B5998]" />, 
-            href: "https://www.facebook.com/adocaodigital" 
+        {
+            icon: <FaFacebook className="w-5 h-5 group-hover:text-[#3B5998]" />,
+            href: "https://www.facebook.com/adocaodigital"
         },
-        { 
-            icon: <FaTwitter className="w-5 h-5 group-hover:text-[#1DA1F2]" />, 
-            href: "https://www.twitter.com/adocaodigital" 
+        {
+            icon: <FaTwitter className="w-5 h-5 group-hover:text-[#1DA1F2]" />,
+            href: "https://www.twitter.com/adocaodigital"
         }
     ];
 
     const adoptionAreas = [
-        'Cães', 'Gatos', 'Animais Exóticos', 
+        'Cães', 'Gatos', 'Animais Exóticos',
         'Adotar em Grupo', 'Voluntariado', 'Doações'
     ];
+
+    const scrollToTop = () => {
+        window.scrollTo({
+            top: -100,
+            behavior: 'smooth',
+        });
+    };
+
 
     return (
         <footer className="bg-gradient-to-br from-[#613387] to-[#8A4FFF] text-white py-16 relative overflow-hidden">
@@ -37,8 +46,8 @@ function Footer() {
                     {/* Brand Section */}
                     <div className="lg:w-1/3 space-y-6">
                         <Link to="/" className="flex items-center space-x-4 group">
-                            <PawPrint 
-                                size={60} 
+                            <PawPrint
+                                size={60}
                                 className="text-[#F8A836] group-hover:rotate-6 transition-transform"
                                 strokeWidth={2}
                             />
@@ -83,8 +92,8 @@ function Footer() {
                                         to={`/areas/${area.toLowerCase().replace(' ', '-')}`}
                                         className="flex items-center group text-gray-200 hover:text-[#F8A836] transition-colors"
                                     >
-                                        <ArrowUpRight 
-                                            className="mr-2 w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" 
+                                        <ArrowUpRight
+                                            className="mr-2 w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity"
                                         />
                                         {area}
                                     </Link>
@@ -100,24 +109,24 @@ function Footer() {
                         </h3>
                         <div className="space-y-4">
                             {[
-                                { 
-                                    icon: <Phone className="w-5 h-5" />, 
-                                    type: 'Telefone', 
-                                    info: '+55 85 9 9999-9999' 
+                                {
+                                    icon: <Phone className="w-5 h-5" />,
+                                    type: 'Telefone',
+                                    info: '+55 85 9 9999-9999'
                                 },
-                                { 
-                                    icon: <Mail className="w-5 h-5" />, 
-                                    type: 'E-mail', 
-                                    info: 'contato@adocao-pet.com.br' 
+                                {
+                                    icon: <Mail className="w-5 h-5" />,
+                                    type: 'E-mail',
+                                    info: 'contato@adocao-pet.com.br'
                                 },
-                                { 
-                                    icon: <MapPin className="w-5 h-5" />, 
-                                    type: 'Endereço', 
-                                    info: 'Rua dos Animais Felizes, 123' 
+                                {
+                                    icon: <MapPin className="w-5 h-5" />,
+                                    type: 'Endereço',
+                                    info: 'Rua dos Animais Felizes, 123'
                                 }
                             ].map((contact, index) => (
-                                <div 
-                                    key={index} 
+                                <div
+                                    key={index}
                                     className="flex items-center space-x-4 text-gray-200 hover:text-[#F8A836] transition-colors group hover:cursor-pointer"
                                 >
                                     <div className="p-2 bg-white/10 rounded-full">
@@ -139,16 +148,28 @@ function Footer() {
                         <p className="text-sm text-gray-300">
                             © {currentYear} Adoção Digital. Todos os direitos reservados.
                         </p>
-                        <div className="flex items-center space-x-4 text-sm">
-                            
-                            <span className="text-gray-600">•</span>
-                            <Link 
-                                to="/privacidade" 
-                                className="hover:text-[#F8A836] transition-colors"
+
+                        <div className="relative group flex flex-col items-center gap-3">
+                            <button
+                                className="text-sm text-gray-300 hover:text-[#F8A836] transition-colors transform ease-in-out duration-1000 hover:scale-110 duration-1000"
+                                onClick={scrollToTop}
                             >
-                                Política de Privacidade
-                            </Link>
+                                <FaArrowUp className="w-5 h-5" />
+                            </button>
+                            {/* Texto exibido no hover */}
+                            <p className="transform ease-in-out duration-1000 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity text-[#F8A836] text-xs">
+                                Voltar ao topo
+                            </p>
                         </div>
+
+
+
+
+
+                        <div className="text-gray-300 hover:text-[#F8A836] transition-colors hover:cursor-pointer">
+                            Denvolvido por Lucas Andrade
+                        </div>
+
                     </div>
                 </div>
             </div>

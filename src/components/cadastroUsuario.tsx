@@ -7,13 +7,15 @@ import { motion } from 'framer-motion';
 
 // importartão das imagens
 import img from '../assets/img-cadastro.jpg';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 // Importando os icones
 import { Mail, User, Lock, Phone, MapPin, Hotel, MapPinHouse } from 'lucide-react';
 
 // importar rota de cadastro
 import CadastrarUsuario from '../rotas/cadastroUsuarios.route';
+import { useState } from 'react';
+import LoginUsuarioRoute from '../rotas/loginUsuario.route';
 
 // Esquema de validação usando Zod
 const formSchema = z.object({
@@ -44,7 +46,7 @@ type FormData = z.infer<typeof formSchema>; // Tipagem do formulário basedo no 
 const CadastroUsuario = () => {
 
 
-    const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
+    const { register, reset, handleSubmit, formState: { errors } } = useForm<FormData>({
         resolver: zodResolver(formSchema),
     });
 
@@ -72,10 +74,80 @@ const CadastroUsuario = () => {
 
             // Depuração do formulário
             console.log('Dados do formulário:', data);
+
+            // Chamar função de login automatico
+            HandleLoginUser(data);
         } catch (error) {
             console.error(error);
         }
     }
+
+    const navigate = useNavigate(); // Hook para redirecionar
+
+    // Função para o login automatico apos o adotante ser cadastrado
+    function saveAdotanteToLocalStorage(token: string, adotante: any) {
+        // Salva o token
+        localStorage.setItem('token', token);
+
+        // Salva os dados básicos do adotante
+        const { id, nome, sobrenome, email, telefone, enderecos } = adotante || {};
+        localStorage.setItem('id', id || '');
+        localStorage.setItem('nome', nome || '');
+        localStorage.setItem('sobrenome', sobrenome || '');
+        localStorage.setItem('email', email || '');
+        localStorage.setItem('telefone', telefone || '');
+
+        // Salva o primeiro endereço, se disponível
+        const endereco = enderecos?.[0] || {};
+        localStorage.setItem('bairro', endereco.bairro || '');
+        localStorage.setItem('cidade', endereco.cidade || '');
+        localStorage.setItem('rua', endereco.rua || '');
+        localStorage.setItem('numero_residencia', endereco.numero_residencia || '');
+    }
+
+    // Função principal de login
+    async function HandleLoginUser(data: FormData) {
+
+        try {
+            // Chama a função que faz a requisição
+            const { token, adotante } = await LoginUsuarioRoute({
+                email: data.email,
+                password: data.senha,
+            });
+
+            // Salva os dados no localStorage
+            saveAdotanteToLocalStorage(token, adotante);
+
+            // Mensagem de depuração
+            console.log('Login realizado com sucesso!', { token, adotante });
+
+            // Redireciona para a página inicial
+            navigate('/');
+
+            // Limpa o formulário
+            reset();
+        } catch (error) {
+            console.error('Erro ao realizar login:', error);
+            alert('Falha ao realizar login. Verifique suas credenciais e tente novamente.');
+        }
+    }
+
+
+
+    // Função para controlar a visibilidade da senha
+    const [showPassword, setShowPassword] = useState(false);
+
+    const togglePasswordVisibility = () => {
+        setShowPassword(!showPassword);
+    };
+
+    // Função para controlar a visibilidade da senha de confirmação
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+    const toggleConfirmPasswordVisibility = () => {
+        setShowConfirmPassword(!showConfirmPassword);
+    };
+
 
     return (
         <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-8 pt-40 pb-10">
@@ -176,40 +248,85 @@ const CadastroUsuario = () => {
                                 </div>
 
                                 {/* Senha */}
-                                <div className='col-span-2 flex flex-col gap-1'>
-                                    <div className="flex items-center gap-2">
-                                        <Lock size={16} color='#4F46E5'></Lock>
-                                        <label htmlFor="senha" className="block text-sm font-medium text-gray-700">Senha</label>
+                                <div className="col-span-2">
+                                    <label htmlFor="senha" className=" text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
+                                        <Lock size={16} color="#4F46E5" />
+                                        Senha
+                                    </label>
+
+                                    <div className="relative">
+                                        {/* Campo de Senha */}
+                                        <input
+                                            {...register('senha')}
+                                            type={showPassword ? 'text' : 'password'}
+                                            name="senha"
+                                            placeholder="Digite sua senha"
+                                            className="block w-full rounded-lg border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-gray-900 sm:text-sm px-4 py-2 focus:outline-none"
+                                        />
+
+                                        {/* Botão de alternar visibilidade */}
+                                        <button
+                                            type="button"
+                                            onClick={togglePasswordVisibility}
+                                            className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700 transition focus:outline-none"
+                                        >
+                                            {showPassword ? (
+                                                <span role="img" aria-label="Ocultar senha">
+                                                    🙈
+                                                </span>
+                                            ) : (
+                                                <span role="img" aria-label="Mostrar senha">
+                                                    👁️
+                                                </span>
+                                            )}
+                                        </button>
                                     </div>
 
-                                    <input
-                                        {...register('senha')}
-                                        type="password"
-                                        name='senha'
-                                        placeholder='Digite sua senha'
-                                        className="block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-3 py-2 focus:outline-none focus:ring-1"
-                                    />
+                                    {/* Mensagem de erro */}
                                     {errors.senha && (
                                         <p className="text-red-500 text-sm mt-1">
                                             {errors.senha.message}
                                         </p>
                                     )}
-
                                 </div>
 
-                                <div className='col-span-2 flex flex-col gap-1'>
-                                    <div className="flex items-center gap-2">
-                                        <Lock size={16} color='#4F46E5'></Lock>
-                                        <label htmlFor="confirmarSenha" className="block text-sm font-medium text-gray-700">Confirmar Senha</label>
+
+                                {/* Senha de confirmação */}
+                                <div className="col-span-2">
+                                    <label htmlFor="senha" className=" text-sm font-medium text-gray-700 mb-1 flex items-center gap-2">
+                                        <Lock size={16} color="#4F46E5" />
+                                        Senha
+                                    </label>
+
+                                    <div className="relative">
+                                        {/* Campo de Senha */}
+                                        <input
+                                            {...register('confirmarSenha')}
+                                            type={showConfirmPassword ? 'text' : 'password'}
+                                            name="confirmarSenha"
+                                            placeholder="Digite sua senha novamente"
+                                            className="block w-full rounded-lg border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-gray-900 sm:text-sm px-4 py-2 focus:outline-none"
+                                        />
+
+                                        {/* Botão de alternar visibilidade */}
+                                        <button
+                                            type="button"
+                                            onClick={toggleConfirmPasswordVisibility}
+                                            className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-gray-700 transition focus:outline-none"
+                                        >
+                                            {showConfirmPassword ? (
+                                                <span role="img" aria-label="Ocultar senha">
+                                                    🙈
+                                                </span>
+                                            ) : (
+                                                <span role="img" aria-label="Mostrar senha">
+                                                    👁️
+                                                </span>
+                                            )}
+                                        </button>
                                     </div>
 
-                                    <input
-                                        {...register('confirmarSenha')}
-                                        type="password"
-                                        name='confirmarSenha'
-                                        placeholder='Confirme sua senha'
-                                        className="block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm px-3 py-2 focus:outline-none focus:ring-1"
-                                    />
+                                    {/* Mensagem de erro */}
                                     {errors.confirmarSenha && (
                                         <p className="text-red-500 text-sm mt-1">
                                             {errors.confirmarSenha.message}
